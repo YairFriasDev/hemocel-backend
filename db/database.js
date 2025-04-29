@@ -4,12 +4,7 @@ const fs = require('fs');
 // Ruta persistente de Render
 const dbPath = '/data/hemocel.db';
 
-// Verificar que /data existe
-if (!fs.existsSync('/data')) {
-  fs.mkdirSync('/data', { recursive: true });
-  console.log('🗂️ Carpeta /data creada manualmente');
-}
-
+// Conexión a la base persistente
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('❌ Error al conectar con la base de datos persistente:', err.message);
