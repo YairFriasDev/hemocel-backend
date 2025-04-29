@@ -6,7 +6,7 @@ const path = require('path');
 const dbPath = '/data/hemocel.db';
 
 // Copia de seguridad inicial (solo se usa una vez)
-const localBackup = path.join(__dirname, '..', 'database.sqlite');
+const localBackup = path.join(__dirname, '..', '..', 'database.sqlite');
 
 // Si la base no existe en /data, copiamos la de respaldo (solo una vez)
 if (!fs.existsSync(dbPath)) {
