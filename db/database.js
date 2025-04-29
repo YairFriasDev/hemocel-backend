@@ -1,14 +1,20 @@
 const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const fs = require('fs');
 
-// Base local persistente mientras el contenedor esté activo
-const dbPath = path.join(__dirname, '..', 'hemocel.db');
+// Ruta persistente de Render
+const dbPath = '/data/hemocel.db';
+
+// Verificar que /data existe
+if (!fs.existsSync('/data')) {
+  fs.mkdirSync('/data', { recursive: true });
+  console.log('🗂️ Carpeta /data creada manualmente');
+}
 
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
-    console.error('❌ Error al conectar con la base de datos:', err.message);
+    console.error('❌ Error al conectar con la base de datos persistente:', err.message);
   } else {
-    console.log('✅ Conectado a la base local:', dbPath);
+    console.log('✅ Conectado a la base de datos persistente:', dbPath);
 
     db.run(`
       CREATE TABLE IF NOT EXISTS inventory (
@@ -18,7 +24,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
         caducidad DATE
       )
     `);
-    
+
     db.run(`
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
