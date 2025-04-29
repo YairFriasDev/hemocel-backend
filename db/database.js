@@ -1,12 +1,25 @@
-// database.js
 const sqlite3 = require('sqlite3').verbose();
+const fs = require('fs');
+const path = require('path');
 
-// Conectar a la base de datos SQLite
-const db = new sqlite3.Database('./db/database.sqlite', (err) => {
+// Ruta persistente en Render
+const dbPath = '/data/hemocel.db';
+
+// Copia de seguridad inicial (solo se usa una vez)
+const localBackup = path.join(__dirname, 'db', 'database.sqlite');
+
+// Si la base no existe en /data, copiamos la de respaldo (solo una vez)
+if (!fs.existsSync(dbPath)) {
+    fs.copyFileSync(localBackup, dbPath);
+    console.log('✅ Base de datos copiada a /data/hemocel.db');
+}
+
+// Conexión a la base persistente
+const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
-        console.error(err.message);
+        console.error('❌ Error al conectar con la base de datos:', err.message);
     } else {
-        console.log('Conectado a la base de datos SQLite.');
+        console.log('✅ Conectado a la base de datos persistente (/data/hemocel.db).');
 
         // Crear tabla de inventario si no existe
         db.run(`
@@ -30,7 +43,7 @@ const db = new sqlite3.Database('./db/database.sqlite', (err) => {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT UNIQUE NOT NULL,
                 password TEXT NOT NULL,
-                role TEXT NOT NULL DEFAULT 'user' -- Puede ser 'admin' o 'user'
+                role TEXT NOT NULL DEFAULT 'user'
             )
         `, (err) => {
             if (err) {
