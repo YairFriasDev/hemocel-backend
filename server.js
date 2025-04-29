@@ -11,7 +11,11 @@ const verifyToken = require('./middlewares/authMiddleware'); // Middleware para 
 // Middlewares
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: 'https://hemocel.com', // Solo permite tu frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 
 // Rutas de autenticación (NO protegidas por verifyToken)
 app.use('/api/auth', authRoutes);  // Aquí no necesitas el middleware de verificación
