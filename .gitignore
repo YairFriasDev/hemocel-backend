@@ -1,7 +1,8 @@
 node_modules/
 *.log
-*.sqlite
+# *.sqlite
 *.db
 *.sqpro
 .env
 .DS_Store
+!hemocel.db
