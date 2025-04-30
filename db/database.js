@@ -2,7 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
 
 // Ruta persistente de Render
-const dbPath = './hemocel.db';
+const dbPath = '/data/hemocel.db';
 
 // Conexión a la base persistente
 const db = new sqlite3.Database(dbPath, (err) => {
