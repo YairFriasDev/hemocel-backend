@@ -1,24 +1,17 @@
 const sqlite3 = require('sqlite3').verbose();
-const fs = require('fs');
 const path = require('path');
 
-// ✅ Ruta persistente en Render
+// ✅ Ruta persistente en Render (funciona solo en planes de pago)
 const dbPath = '/data/hemocel.db';
 
-// 🧠 Verificar si el archivo no existe y crearlo vacío
-if (!fs.existsSync(dbPath)) {
-  fs.writeFileSync(dbPath, '');
-  console.log('🆕 Archivo hemocel.db creado en /data');
-}
-
-// ✅ Conexión a la base de datos persistente
+// ✅ Conexión a la base de datos (creará el archivo si no existe)
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('❌ Error al conectar con la base de datos persistente:', err.message);
   } else {
     console.log('✅ Conectado a la base de datos persistente:', dbPath);
 
-    // Crear tabla de inventario
+    // Tabla de inventario
     db.run(`
       CREATE TABLE IF NOT EXISTS inventory (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -28,10 +21,10 @@ const db = new sqlite3.Database(dbPath, (err) => {
       )
     `, (err) => {
       if (err) console.error('⚠️ Error creando tabla inventory:', err.message);
-      else console.log('📦 Tabla inventory verificada o creada.');
+      else console.log('📦 Tabla inventory lista.');
     });
 
-    // Crear tabla de usuarios
+    // Tabla de usuarios
     db.run(`
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,7 +34,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
       )
     `, (err) => {
       if (err) console.error('⚠️ Error creando tabla users:', err.message);
-      else console.log('👥 Tabla users verificada o creada.');
+      else console.log('👥 Tabla users lista.');
     });
   }
 });
